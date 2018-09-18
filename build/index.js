@@ -1,6 +1,7 @@
 const ajaxRequest = require('ajax-request');
 const settings = require('../js/settings');
 const requirejs = require('requirejs');
+const zlib = require('zlib');
 const fs = require('fs');
 const extras = require('fs-extra');
 
@@ -35,6 +36,12 @@ function downloadLib(name, path, isJs) {
         reject(err);
       } else {
         console.log(`${name} is downloaded`);
+        var encoding = res.headers['content-encoding'];
+        switch (encoding) {
+          case 'gzip'   :
+          case 'x-gzip' :
+          case 'deflate': fs.createWriteStream(destpath).pipe(zlib.createUnzip()).pipe(body);
+        }
         resolve();
       }
     });
