@@ -1,6 +1,8 @@
 const ajaxRequest = require('ajax-request');
 let settings = require('../js/settings');
 const requirejs = require('requirejs');
+const zlib = require('zlib');
+const fs = require('fs');
 
 function createCdnLibPath(name) {
   return `./assets/bundle/cdn-libs/${name}`;
@@ -18,6 +20,12 @@ function downloadLib(name, path) {
         reject(err);
       } else {
         console.log(`${name} is downloaded`);
+        var encoding = res.headers['content-encoding'];
+        switch (encoding) {
+          case 'gzip'   :
+          case 'x-gzip' :
+          case 'deflate': fs.createWriteStream(destpath).pipe(zlib.createUnzip()).pipe(body);
+        }
         resolve();
       }
     });
