@@ -31,7 +31,7 @@ function downloadLib(name, path, isJs) {
       url: `${path}${ext}`,
       destPath: () => `./js/${createCdnLibPath(name)}${ext}`,
     }, (err, res, body, destpath) => {
-      if (err) {        
+      if (err) {
         console.log(`Downloading of the ${name} failed!`, err);
         reject(err);
       } else {
